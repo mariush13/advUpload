@@ -18,4 +18,8 @@ div#advUploadProgressPosition.done {
 
 div#advUploadProgressPosition.error {
     background-color: red;
-} 
+}
+
+input[type='file'] {
+    display: block;    
+}    
