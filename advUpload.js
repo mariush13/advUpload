@@ -1,50 +1,27 @@
-
-
-function getProgress(){
-    console.log('progress');
-    $.ajax({
-        type: "POST",
-        contentType: "text/plain",
-        url: "advUpload.php?action=getProgress",
-        success: function(data){
-            $('#advUploadOutput').html(data);
-        }
-    })
-}
 $(document).ready(function(){
-    
         $('#advUploadForm').on('submit', function(e) {
-            var timer = setInterval(getProgress(), 10);
-            e.preventDefault(); // <-- important
+            e.preventDefault();
             $(this).ajaxSubmit({
-               
+                beforeSend: function() {
+                    $('#advUploadPercent').html('0%');
+                    $('#advUploadProgressPosition').css('width','0%');
+                    $('#advUploadProgressPosition').removeClass();
+                },
+                uploadProgress: function(event, position, total, percentComplete) {
+                    $('#advUploadPercent').html(percentComplete+'%');
+                    $('#advUploadProgressPosition').css('width',percentComplete+'%');
+                },
+                complete: function(xhr) {
+                    $('#advUploadPercent').html(xhr.responseText);
+                    if (xhr.responseText == 'true'){
+                        $('#advUploadPercent').html('Wysłano poprawnie');
+                        $('#advUploadProgressPosition').addClass('done');
+                    }else{
+                        $('#advUploadPercent').html('Błąd wysyłania');
+                        $('#advUploadProgressPosition').addClass('error');
+                    } 
+                }
             });
         });
-
-    
-   /* $("#advUploadButton").click(function(event) {    
-        console.log('click');
-       // var dados = $('#advUploadForm').serialize(); 
-        var formData = $('#advUploadForm').serializeObject();
-        console.log(formData);
-        $.ajax({  
-            type: "POST", 
-            contentType:"multipart/form-data",
-            url: "advUpload.php?action=upload",  
-            data: formData, 
-            beforeSend: function () {
-                console.log('setInterval');
-            },
-            success: function(data)  
-            {  
-                clearInterval(timer);
-                console.log(data);
-            }  
-        });  
-                  
-        return false;  
-        } 
-    );
-    */
     
 });
