@@ -23,9 +23,16 @@
  * and then:
  * $advUpload->setConfig($config);
  * 
+ * Default config is placed below
+ * 
+ * In head section write scripts
+ * <script type="text/javascript">
+ * 		<?php $advUpload->showScripts(); ?>
+ * </script>
+ * 
  * In place where you want to put advUpload write: 
  * $advUpload->showUploader($files);
- * where $files contain cout of uploaders
+ * where $files contain number of uploaders
  * 
  */
 
@@ -37,6 +44,7 @@ class advUpload {
         'uploadAction' => 'advUploadFiles',
         'successText' => 'Wysłano poprawnie',
         'errorText' => 'Błąd wysyłania',
+    	'chooseFileText' => 'Wybierz plik',
         'showUploadText' => false,
         'showUploadProgressBar' => false
     );
@@ -51,7 +59,11 @@ class advUpload {
     public function showUploader($files = 1) {      
         $return = '<form id="'.$this->config['formID'].'" method="POST" action ="'.$_SERVER["PHP_SELF"].'?action='.$this->config['uploadAction'].'" enctype="multipart/form-data">'."\n";;
         for($i=0; $i<$files; $i++){
+            $return .= '<div id="advUploadInputDiv_'.$i.'" class="advUploadInputDiv">';
+            $return .= '<div id="class="advUploadInputFileName_'.$i.'" class="advUploadInputFileName">'.$this->config['chooseFileText'].'</div>';
             $return .= '<input type="file" name="advUploadFile_'.$i.'">'."\n";
+            $return .= '<div id="advUploadInputChooseButton_'.$i.'" class="advUploadInputChooseButton">...</div>';
+            $return .= '</div>';      
         }
         $return .= '<input id="advUploadButton" type="submit" value="Wyślij">'."\n";      
         $return .= ($this->config['showUploadProgressBar'])?'<div id="advUploadProgressBar"><div id="advUploadProgressPosition"></div></div>':'';
@@ -69,6 +81,13 @@ class advUpload {
     public function showScripts(){
         
         $return = '$(document).ready(function(){
+        		$(\'.advUploadInputChooseButton\').click(function(){  				
+        			$(this).parent().children(\'input\').click();
+    			});
+        		$(\'#'.$this->config['formID'].' input:file\').change(function(){
+    				$(this).parent().children(\'.advUploadInputFileName\').html($(this).val().replace("C:fakepath",""));
+    			});
+        
             	$(\'#'.$this->config['formID'].'\').on(\'submit\', function(e) {
                 e.preventDefault();
                 $(this).ajaxSubmit({
@@ -82,7 +101,7 @@ class advUpload {
                         '.(($this->config['showUploadProgressBar'])?'$(\'#advUploadProgressPosition\').css(\'width\',percentComplete+\'%\');':'').'        
                     },
                     complete: function(xhr) {
-                        $(\':file\').val(\'\');
+                        $(\'#'.$this->config['formID'].' input:file\').val(\'\');
                         if (xhr.responseText == \'true\'){
                             '.(($this->config['showUploadText'])?'$(\'#advUploadText\').html(\''.$this->config['successText'].'\');':'').'
                             '.(($this->config['showUploadProgressBar'])?'$(\'#advUploadProgressPosition\').addClass(\'done\');':'').'

@@ -1,25 +1,57 @@
 div#advUploadProgressBar {
     width: 300px;
     height: 20px;    
-    border: 1px black solid;
+    border: 1px silver solid;
     border-radius: 3px;
+    background-image: url('./images/bg2.jpg');
 }
 
 div#advUploadProgressPosition {
-    background-color: cyan;
+    background-image: url('./images/bg1.jpg');
     border-radius: 3px;  
     width: 0%;
     height: 20px;  
 }    
 
 div#advUploadProgressPosition.done {
-    background-color: lime;
+    /* background-color: lime; */
 }
 
 div#advUploadProgressPosition.error {
-    background-color: red;
+    /* background-color: red; */
 }
 
-input[type='file'] {
-    display: block;    
+#advUploadForm input[type='file'] {
+    display: none;
+}
+
+.advUploadInputDiv {
+    width: 295px;
+    padding-left: 5px;
+    height: 20px;
+    border: 1px silver solid;
+    border-radius: 3px;
+}
+
+.advUploadInputChooseButton {
+    float: right;
+    width: 16px;
+    line-height: 14px;
+    height: 16px;
+    cursor: pointer;
+    text-align: center;
+    margin-right: 1px;
+    margin-top: 1px;
+    border: 1px silver solid;
+    border-radius: 3px;    
+}
+
+.advUploadInputFileName {
+    float: left;    
+}
+
+#advUploadButton {
+    border: 1px silver solid;
+    background-color: white;    
+    border-radius: 3px;
 }    
